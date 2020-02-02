@@ -1,5 +1,7 @@
 import { Recyclable, recyclable, IRecyclable } from "./ClassUtils";
 import { Link } from "./Link";
+import { RecycleObjType, foreach, RecyclePro } from "./Attibute";
+import { RecycleObject } from "./Recycle";
 
 export type EventHandler = (event: EventX) => void;
 
@@ -44,33 +46,35 @@ export enum EventT {
 	FOCUS_IN
 }
 
-export class EventX implements IRecyclable {
+export class EventX extends RecycleObject {
 
 	static TEMP: EventX = new EventX();
 
 	type: string | number = undefined;
+
+	@RecyclePro(undefined)
 	data: any;
+
+	@RecyclePro(false)
 	bubbles: boolean;
+
+	@RecyclePro(undefined)
 	target: IEventDispatcherX;
+
+	@RecyclePro(undefined)
 	currentTarget: IEventDispatcherX;
 
+	@RecyclePro(false)
 	stopPropagation: boolean;
+
+	@RecyclePro(false)
 	stopImmediatePropagation: boolean;
 
 	constructor(type?: string | number, data?: any, bubbles?: boolean) {
+		super();
 		this.type = type;
 		this.data = data;
 		this.bubbles = bubbles;
-	}
-
-	onRecycle(): void {
-		this.data = undefined;
-		this.type = undefined;
-		this.target = undefined;
-		this.currentTarget = undefined;
-		this.bubbles = false;
-		this.stopPropagation = false;
-		this.stopImmediatePropagation = false;
 	}
 }
 
@@ -79,12 +83,13 @@ export class EventX implements IRecyclable {
  * @author crl
  *
  */
-export class MiniDispatcher implements IEventDispatcherX, IRecyclable {
+export class MiniDispatcher extends RecycleObject implements IEventDispatcherX, IRecyclable {
 	mEventListeners: { [key: string]: Recyclable<Link> };
 	mTarget: IEventDispatcherX;
 
 	/** Creates an EventDispatcher. */
 	constructor(target: IEventDispatcherX = null) {
+		super();
 		if (target == null) {
 			target = this;
 		}
@@ -191,7 +196,7 @@ export class MiniDispatcher implements IEventDispatcherX, IRecyclable {
 				if (undefined != f) {
 					if (f.length == 2) {
 						f.call(vo.thisObj, event, event.data);
-					}else{
+					} else {
 						f.call(vo.thisObj, event);
 					}
 				}

@@ -2,7 +2,7 @@ import { IEventInterests } from "./MVC";
 
 export type ForEachFunction<T> = (v: T, k: string | number, obj: { [key: string]: T } | T[]) => boolean;
 export type ForArrFunction<T> = (v: T, k: number, obj: T[]) => boolean;
-export type RecycleObjType = {[key:string]:any};
+export type RecycleObjType = { [key: string]: any };
 export function forarr<T>(obj: T[], func: ForArrFunction<T>) {
     if (!obj) {
         return;
@@ -11,7 +11,7 @@ export function forarr<T>(obj: T[], func: ForArrFunction<T>) {
     let i = 0;
     while (i < len) {
 
-        if (false === func(obj[i], i, obj)) {
+        if (false === func.call(this, obj[i], i, obj)) {
             return;
         }
 
@@ -26,7 +26,7 @@ export function foreach<T>(obj: { [key: string]: T }, func: ForEachFunction<T>) 
         return;
     }
     for (const key in obj) {
-        if (false === func(obj[key], key, obj)) {
+        if (false === func.call(this, obj[key], key, obj)) {
             return;
         }
     }
@@ -72,9 +72,9 @@ export function DebugProperty(enumerable = true, configurable = true) {
 }
 
 export function RecyclePro(defaultValue: any) {
-    return function (host: {recyleObj:RecycleObjType}, property: string) {
+    return function (host: { recyleObj: RecycleObjType }, property: string) {
         let recyleObj = host.recyleObj;
-        if(!recyleObj){
+        if (!recyleObj) {
             host["recyleObj"] = recyleObj = {};
         }
         recyleObj[property] = defaultValue;

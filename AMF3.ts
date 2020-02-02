@@ -728,7 +728,7 @@ export class AMF3Encode extends Byte {
 	unit8: Uint8Array
 
 	constructor(buf?: ArrayBuffer) {
-		super(buf || new ArrayBuffer(10240 * 1024));
+		super(buf || new ArrayBuffer(20 * 1024));
 		this.unit8 = new Uint8Array(this.buf.buffer);
 	}
 
